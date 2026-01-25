@@ -2,6 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
+package com.mycompany.coffeeshopdesktopex;
 
 /**
  *
@@ -15,7 +16,7 @@ public class DBConnection {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             // Change 'root' and 'password' to your actual MySQL login
-            return DriverManager.getConnection("jdbc:mysql://localhost:3306/coffee_shop_db", "root", "password");
+            return DriverManager.getConnection("jdbc:mysql://localhost:3306/coffee_shop_db", "root", "16534237");
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Connection Failed: " + e);
             return null;
