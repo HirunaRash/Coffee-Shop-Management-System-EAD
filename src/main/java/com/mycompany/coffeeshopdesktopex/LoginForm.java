@@ -100,7 +100,7 @@ public class LoginForm extends javax.swing.JFrame {
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
         String user = txtUser.getText();
-    String pass = new String(txtPass.getPassword());
+        String pass = new String(txtPass.getPassword());
 
     if (user.isEmpty() || pass.isEmpty()) {
         JOptionPane.showMessageDialog(this, "Please fill all fields");
