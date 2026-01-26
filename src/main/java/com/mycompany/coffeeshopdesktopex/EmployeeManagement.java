@@ -11,6 +11,14 @@ package com.mycompany.coffeeshopdesktopex;
 import java.sql.*;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+
+import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
+import net.sf.jasperreports.view.JasperViewer;
+import java.io.InputStream;
+import java.sql.Connection;
+import javax.swing.JOptionPane;
 // JasperReports imports
 //import net.sf.jasperreports.engine.*;
 //import net.sf.jasperreports.engine.design.JasperDesign;
@@ -230,6 +238,35 @@ public class EmployeeManagement extends javax.swing.JFrame {
 
     private void btnPrintActionPerformedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrintActionPerformedActionPerformed
         // TODO add your handling code here:
+        try {
+        // 1. Get the Database Connection from your existing DB class
+        Connection con = DBConnection.connect(); 
+
+        // 2. Load the report file from the Maven Resources folder
+        // The "/" at the start is crucial—it looks in src/main/resources
+        InputStream reportStream = getClass().getResourceAsStream("/reports/EmployeeReport.jrxml");
+
+        if (reportStream == null) {
+            JOptionPane.showMessageDialog(this, "Critical Error: EmployeeReport.jrxml not found in resources/reports folder!");
+            return;
+        }
+
+        // 3. Compile the XML design (.jrxml) into a Jasper Report object
+        JasperDesign jDesign = JRXmlLoader.load(reportStream);
+        JasperReport jReport = JasperCompileManager.compileReport(jDesign);
+
+        // 4. Fill the report with data from your MySQL connection
+        // We pass 'null' because we aren't using parameters like "where id = 1" yet
+        JasperPrint jPrint = JasperFillManager.fillReport(jReport, null, con);
+
+        // 5. Display the report in the Jasper Viewer window
+        // The 'false' parameter ensures the whole App doesn't close when you close the report
+        JasperViewer.viewReport(jPrint, false);
+
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Jasper Report Error: " + e.getMessage());
+        e.printStackTrace(); // This helps you see the exact error in the NetBeans Output console
+    }
 
     }//GEN-LAST:event_btnPrintActionPerformedActionPerformed
 
