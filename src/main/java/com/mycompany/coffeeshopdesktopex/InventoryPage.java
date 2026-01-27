@@ -58,6 +58,7 @@ public class InventoryPage extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         txtPrice = new javax.swing.JTextField();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -76,7 +77,7 @@ public class InventoryPage extends javax.swing.JFrame {
                 {null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Name", "Quantity", "Price", "Category"
             }
         ));
         tblInventory.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -121,6 +122,13 @@ public class InventoryPage extends javax.swing.JFrame {
 
         jLabel6.setText("Catogory");
 
+        jButton1.setText("Back");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -152,7 +160,9 @@ public class InventoryPage extends javax.swing.JFrame {
                         .addGap(84, 84, 84)
                         .addComponent(btnPrint))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(274, 274, 274)
+                        .addGap(14, 14, 14)
+                        .addComponent(jButton1)
+                        .addGap(185, 185, 185)
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 322, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(250, 250, 250)
@@ -165,7 +175,9 @@ public class InventoryPage extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(27, 27, 27)
-                .addComponent(jLabel1)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jButton1))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(111, 111, 111)
@@ -203,10 +215,22 @@ public class InventoryPage extends javax.swing.JFrame {
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
 
+        // Check if any field is empty
+if (txtName.getText().trim().isEmpty() || 
+    txtQty.getText().trim().isEmpty() || 
+    txtPrice.getText().trim().isEmpty()) {
+    
+    JOptionPane.showMessageDialog(this, "Please enter all item details before adding!");
+    return; // This stops the code from reaching the database part
+}
+
+// Your existing Database INSERT code goes below here...
+        
    try (Connection con = DBConnection.connect()) {
        
     String sql = "INSERT INTO inventory (item_name, quantity, price, category) VALUES (?, ?, ?, ?)";
     PreparedStatement pst = con.prepareStatement(sql);
+    
     pst.setString(1, txtName.getText());
     pst.setInt(2, Integer.parseInt(txtQty.getText()));
     pst.setDouble(3, Double.parseDouble(txtPrice.getText()));
@@ -232,6 +256,16 @@ int row = tblInventory.getSelectedRow();
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
         // TODO add your handling code here:
+        
+        int selectedRow = tblInventory.getSelectedRow();
+
+if (selectedRow == -1) {
+    JOptionPane.showMessageDialog(this, "Please select an item from the table first!");
+    return;
+}
+
+// Your existing Update/Delete code goes below here...
+
         int row = tblInventory.getSelectedRow();
 if (row == -1) {
     JOptionPane.showMessageDialog(this, "Select a row first!");
@@ -259,6 +293,15 @@ try (Connection con = DBConnection.connect()) {
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         // TODO add your handling code here:
+        int selectedRow = tblInventory.getSelectedRow();
+
+if (selectedRow == -1) {
+    JOptionPane.showMessageDialog(this, "Please select an item from the table first!");
+    return;
+}
+
+// Your existing Update/Delete code goes below here...
+        
         int row = tblInventory.getSelectedRow();
 if (row == -1) {
     JOptionPane.showMessageDialog(this, "Select a row!");
@@ -291,6 +334,14 @@ try (Connection con = DBConnection.connect()) {
     JOptionPane.showMessageDialog(this, "Report Error: " + e.getMessage());
 }
     }//GEN-LAST:event_btnPrintActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        AdminDashboard adb = new AdminDashboard();
+        adb.setVisible(true);
+        this.dispose(); 
+        
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -355,6 +406,7 @@ try (Connection con = DBConnection.connect()) {
     private javax.swing.JButton btnPrint;
     private javax.swing.JButton btnUpdate;
     private javax.swing.JComboBox<String> cmbCategory;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
