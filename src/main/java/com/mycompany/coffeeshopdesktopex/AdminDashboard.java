@@ -75,7 +75,9 @@ public class AdminDashboard extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+        InventoryPage inv = new InventoryPage();
+        inv.setVisible(true);
+        this.dispose(); // Optional: closes the dashboard        // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**

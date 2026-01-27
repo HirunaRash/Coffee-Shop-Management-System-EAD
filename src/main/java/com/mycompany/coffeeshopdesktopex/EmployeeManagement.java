@@ -55,7 +55,6 @@ public class EmployeeManagement extends javax.swing.JFrame {
         btnUpdate = new javax.swing.JButton();
         btnDelete = new javax.swing.JButton();
         btnPrintActionPerformed = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
         txtId = new javax.swing.JTextField();
         txtName = new javax.swing.JTextField();
         txtPos = new javax.swing.JTextField();
@@ -63,6 +62,7 @@ public class EmployeeManagement extends javax.swing.JFrame {
         txtContact = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setBackground(new java.awt.Color(51, 153, 255));
 
         tblEmployees.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -75,6 +75,11 @@ public class EmployeeManagement extends javax.swing.JFrame {
                 "ID", "Name", "Position", "Salary", "Contact No"
             }
         ));
+        tblEmployees.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblEmployeesMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblEmployees);
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
@@ -119,8 +124,6 @@ public class EmployeeManagement extends javax.swing.JFrame {
             }
         });
 
-        jButton5.setText("jButton5");
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -161,13 +164,11 @@ public class EmployeeManagement extends javax.swing.JFrame {
                 .addComponent(btnDelete)
                 .addGap(123, 123, 123)
                 .addComponent(btnPrintActionPerformed)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 91, Short.MAX_VALUE)
-                .addComponent(jButton5)
-                .addGap(46, 46, 46))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(46, 212, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(357, 357, 357)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(414, 414, 414))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -201,8 +202,7 @@ public class EmployeeManagement extends javax.swing.JFrame {
                             .addComponent(btnAdd)
                             .addComponent(btnUpdate)
                             .addComponent(btnDelete)
-                            .addComponent(btnPrintActionPerformed)
-                            .addComponent(jButton5))
+                            .addComponent(btnPrintActionPerformed))
                         .addGap(28, 28, 28))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 315, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -351,6 +351,26 @@ public class EmployeeManagement extends javax.swing.JFrame {
     }
     }//GEN-LAST:event_btnDeleteActionPerformed
 
+    private void tblEmployeesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblEmployeesMouseClicked
+        // TODO add your handling code here:
+        // 1. Get the index of the row that was clicked
+    int selectedRow = tblEmployees.getSelectedRow();
+    
+    // 2. Get the table model to access data
+    DefaultTableModel model = (DefaultTableModel) tblEmployees.getModel();
+    
+    // 3. Set values to your text fields based on column index
+    // Note: Column 0 is usually the hidden 'item_id' or 'employee_id'
+    txtId.setText(model.getValueAt(selectedRow, 0).toString());
+    txtName.setText(model.getValueAt(selectedRow, 1).toString());
+    txtPos.setText(model.getValueAt(selectedRow, 2).toString());
+    txtSal.setText(model.getValueAt(selectedRow, 3).toString());
+    txtContact.setText(model.getValueAt(selectedRow, 4).toString());
+    
+    // 4. Set the value for your ComboBox (e.g., Department or Gender)
+    
+    }//GEN-LAST:event_tblEmployeesMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -412,7 +432,6 @@ public class EmployeeManagement extends javax.swing.JFrame {
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnPrintActionPerformed;
     private javax.swing.JButton btnUpdate;
-    private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
