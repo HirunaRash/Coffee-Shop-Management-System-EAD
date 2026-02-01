@@ -200,11 +200,23 @@
 				<reportElement x="350" y="0" width="100" height="30" uuid="6a52eea2-1952-484f-8c54-be75d4f07a7e">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="bc9e801d-dc91-4dc2-8d76-2e58904fc0ce"/>
 				</reportElement>
-				<text><![CDATA[Bonus]]></text>
+				<text><![CDATA[Bonus(+)]]></text>
 			</staticText>
 			<line>
 				<reportElement x="-22" y="140" width="605" height="1" uuid="83a40ca7-d3c7-42f1-80d7-c52d3c4d0d87"/>
 			</line>
+			<textField>
+				<reportElement x="460" y="30" width="100" height="30" uuid="b214e5c9-4fea-4b5a-9c60-be7dc4009e48">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="d72fd48c-2fc3-4722-b09e-6dcf75b1296b"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{deductions}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="460" y="0" width="100" height="30" uuid="d7370612-4a10-412d-b311-b922f9d6936f">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="d72fd48c-2fc3-4722-b09e-6dcf75b1296b"/>
+				</reportElement>
+				<text><![CDATA[Deductions(-)]]></text>
+			</staticText>
 		</band>
 	</detail>
 	<columnFooter>
