@@ -10,6 +10,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import java.io.InputStream;
+import java.util.HashMap;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.view.JasperViewer;
+// (Other Jasper imports you already have)
 /**
  *
  * @author USER
@@ -117,6 +127,11 @@ public class SalaryPage extends javax.swing.JFrame {
         });
 
         btnPrintSlip.setText("Print Slip");
+        btnPrintSlip.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPrintSlipActionPerformed(evt);
+            }
+        });
 
         tblPayroll.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -197,7 +212,7 @@ public class SalaryPage extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(lblNetPay, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(206, 206, 206))))
+                        .addGap(261, 261, 261))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -236,14 +251,14 @@ public class SalaryPage extends javax.swing.JFrame {
                             .addComponent(btnPrintSlip))
                         .addGap(124, 124, 124))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(46, 46, 46)
-                        .addComponent(lblNetPay)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(56, 56, 56)
+                                .addGap(48, 48, 48)
+                                .addComponent(lblNetPay)
+                                .addGap(54, 54, 54)
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 263, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(130, 130, 130)
+                                .addGap(201, 201, 201)
                                 .addComponent(JScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addContainerGap(55, Short.MAX_VALUE))))
         );
@@ -361,6 +376,45 @@ public class SalaryPage extends javax.swing.JFrame {
     }
     
     }//GEN-LAST:event_btnSearchActionPerformed
+
+    private void btnPrintSlipActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrintSlipActionPerformed
+        // TODO add your handling code here:
+        // 1. Check if a row is selected in your table
+    int row = tblPayroll.getSelectedRow();
+    if (row == -1) {
+        JOptionPane.showMessageDialog(this, "Please select a record from the table first!");
+        return;
+    }
+
+    // 2. Get the Payment ID from the first column
+    int payId = Integer.parseInt(tblPayroll.getValueAt(row, 0).toString());
+
+    try (Connection con = DBConnection.connect()) {
+        // 3. Load the report using an InputStream (Safe for JAR files)
+        InputStream in = getClass().getResourceAsStream("/reports/PaySlip.jrxml");
+        if (in == null) {
+            JOptionPane.showMessageDialog(this, "Report file not found!");
+            return;
+        }
+
+        // 4. Set the Parameter
+        HashMap<String, Object> para = new HashMap<>();
+        para.put("PAY_ID", payId);
+
+        // 5. Compile, Fill, and View
+        JasperDesign jd = JRXmlLoader.load(in);
+        JasperReport jr = JasperCompileManager.compileReport(jd);
+        JasperPrint jp = JasperFillManager.fillReport(jr, para, con);
+        
+        // false means it won't close your whole app when you close the report
+        JasperViewer.viewReport(jp, false); 
+
+    } catch (Exception e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+    }
+
+    }//GEN-LAST:event_btnPrintSlipActionPerformed
 
     /**
      * @param args the command line arguments
