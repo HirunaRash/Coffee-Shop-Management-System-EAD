@@ -4,6 +4,12 @@
  */
 package com.mycompany.coffeeshopdesktopex;
 import javax.swing.JOptionPane;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 /**
  *
  * @author USER
@@ -15,6 +21,7 @@ public class SalaryPage extends javax.swing.JFrame {
      */
     public SalaryPage() {
         initComponents();
+        loadPayrollTable();
     }
 
     /**
@@ -56,6 +63,11 @@ public class SalaryPage extends javax.swing.JFrame {
         jLabel2.setText("Enter Employee ID:");
 
         btnSearch.setText("Search");
+        btnSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearchActionPerformed(evt);
+            }
+        });
 
         jLabel3.setText("Employee Name");
 
@@ -98,6 +110,11 @@ public class SalaryPage extends javax.swing.JFrame {
         });
 
         btnPayNow.setText("Pay Now");
+        btnPayNow.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPayNowActionPerformed(evt);
+            }
+        });
 
         btnPrintSlip.setText("Print Slip");
 
@@ -268,6 +285,83 @@ public class SalaryPage extends javax.swing.JFrame {
        
     }//GEN-LAST:event_btnCalculateActionPerformed
 
+    private void btnPayNowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPayNowActionPerformed
+        
+        // TODO add your handling code here:
+        try (Connection con = DBConnection.connect()) {
+        // 1. Validation: Ensure calculation was done
+        if (lblNetPay.getText().equals("0.00") || lblNetPay.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please calculate the salary first!");
+            return;
+        }
+
+        // 2. Insert Query
+        String sql = "INSERT INTO payroll (employee_id, employee_name, month_year, basic_salary, bonus, deductions, net_pay) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        PreparedStatement pst = con.prepareStatement(sql);
+        
+        pst.setInt(1, Integer.parseInt(txtSearchId.getText()));
+        pst.setString(2, txtEmpName.getText());
+        pst.setString(3, cmbMonth.getSelectedItem().toString() + " " + cmbYear.getSelectedItem().toString());
+        pst.setDouble(4, Double.parseDouble(txtBasicSalary.getText()));
+        pst.setDouble(5, Double.parseDouble(txtBonus.getText()));
+        pst.setDouble(6, Double.parseDouble(txtDeductions.getText()));
+        pst.setDouble(7, Double.parseDouble(lblNetPay.getText()));
+
+        pst.executeUpdate();
+        
+        // 3. Success and Refresh
+        JOptionPane.showMessageDialog(this, "Payment Successful!");
+        loadPayrollTable(); // This refreshes your table immediately!
+        
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Database Error: " + e.getMessage());
+    }
+    }//GEN-LAST:event_btnPayNowActionPerformed
+
+    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
+
+        // TODO add your handling code here:
+        String searchId = txtSearchId.getText().trim();
+
+    // 1. Validation: Check if the ID field is empty
+    if (searchId.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Please enter an Employee ID to search.");
+        return;
+    }
+
+    // 2. Database Connection and Query
+    try (Connection con = DBConnection.connect()) {
+        // Querying the employees table (assuming 'item_id' is your Employee ID)
+        String sql = "SELECT name, salary FROM employees WHERE emp_id = ?";
+        PreparedStatement pst = con.prepareStatement(sql);
+        pst.setString(1, searchId);
+        
+        ResultSet rs = pst.executeQuery();
+
+        if (rs.next()) {
+            // 3. Populate fields if found
+            txtEmpName.setText(rs.getString("name"));
+            txtBasicSalary.setText(rs.getString("salary"));
+            
+            // Optional: Reset calculation fields for the new employee
+            txtBonus.setText("0");
+            txtDeductions.setText("0");
+            lblNetPay.setText("0.00");
+        } else {
+            // 4. Handle 'Not Found' case
+            JOptionPane.showMessageDialog(this, "Employee ID " + searchId + " not found!");
+            txtEmpName.setText("");
+            txtBasicSalary.setText("");
+        }
+        
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(this, "Database Error: " + e.getMessage());
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+    }
+    
+    }//GEN-LAST:event_btnSearchActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -302,6 +396,33 @@ public class SalaryPage extends javax.swing.JFrame {
             }
         });
     }
+    
+    public void loadPayrollTable() {
+    // 1. Get the table model and clear existing rows
+    DefaultTableModel model = (DefaultTableModel) tblPayroll.getModel();
+    model.setRowCount(0); 
+
+    try (Connection con = DBConnection.connect()) {
+        // 2. Query to get payroll data (Join with employees if you want department info)
+        String query = "SELECT * FROM payroll ORDER BY payment_id DESC";
+        PreparedStatement pst = con.prepareStatement(query);
+        ResultSet rs = pst.executeQuery();
+
+        // 3. Loop through the result set and add to table
+        while (rs.next()) {
+            model.addRow(new Object[]{
+                rs.getInt("payment_id"),
+                rs.getInt("employee_id"),
+                rs.getString("employee_name"),
+                rs.getString("month_year"),
+                rs.getDouble("net_pay"),
+                rs.getTimestamp("payment_date")
+            });
+        }
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Error loading table: " + e.getMessage());
+    }
+}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane JScrollPane;
