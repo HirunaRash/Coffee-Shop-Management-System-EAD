@@ -250,11 +250,11 @@ public class EmployeeManagement extends javax.swing.JFrame {
     private void btnPrintActionPerformedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrintActionPerformedActionPerformed
         // TODO add your handling code here:
         try {
-        // 1. Get the Database Connection from your existing DB class
+        // Get the Database Connection from your existing DB class
         Connection con = DBConnection.connect(); 
 
-        // 2. Load the report file from the Maven Resources folder
-        // The "/" at the start is crucial—it looks in src/main/resources
+        // Load the report file from the Maven Resources folder
+        
         InputStream reportStream = getClass().getResourceAsStream("/reports/EmployeeReport.jrxml");
 
         if (reportStream == null) {
@@ -262,27 +262,27 @@ public class EmployeeManagement extends javax.swing.JFrame {
             return;
         }
 
-        // 3. Compile the XML design (.jrxml) into a Jasper Report object
+        // Compile the XML design (.jrxml) into a Jasper Report object
         JasperDesign jDesign = JRXmlLoader.load(reportStream);
         JasperReport jReport = JasperCompileManager.compileReport(jDesign);
 
-        // 4. Fill the report with data from your MySQL connection
-        // We pass 'null' because we aren't using parameters like "where id = 1" yet
+        // Fill the report with data from your MySQL connection
+        
         JasperPrint jPrint = JasperFillManager.fillReport(jReport, null, con);
 
-        // 5. Display the report in the Jasper Viewer window
-        // The 'false' parameter ensures the whole App doesn't close when you close the report
+        // Display the report in the Jasper Viewer window
+        
         JasperViewer.viewReport(jPrint, false);
 
     } catch (Exception e) {
         JOptionPane.showMessageDialog(this, "Jasper Report Error: " + e.getMessage());
-        e.printStackTrace(); // This helps you see the exact error in the NetBeans Output console
+        e.printStackTrace(); // error handlihn
     }
 
     }//GEN-LAST:event_btnPrintActionPerformedActionPerformed
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-        // TODO add your handling code here:
+        
         String id = txtId.getText();
     String name = txtName.getText();
     String position = txtPos.getText();
@@ -323,7 +323,7 @@ public class EmployeeManagement extends javax.swing.JFrame {
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         // TODO add your handling code here:
-        // 1. Ask for confirmation before deleting
+        // Ask for confirmation before deleting
     int dialogResult = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this employee?", "Warning", JOptionPane.YES_NO_OPTION);
     
     if(dialogResult == JOptionPane.YES_OPTION) {
@@ -364,13 +364,13 @@ public class EmployeeManagement extends javax.swing.JFrame {
 
     private void tblEmployeesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblEmployeesMouseClicked
         // TODO add your handling code here:
-        // 1. Get the index of the row that was clicked
+        // Get the index of the row that was clicked
     int selectedRow = tblEmployees.getSelectedRow();
     
-    // 2. Get the table model to access data
+    // Get the table model to access data
     DefaultTableModel model = (DefaultTableModel) tblEmployees.getModel();
     
-    // 3. Set values to your text fields based on column index
+    // Set values to your text fields based on column index
     // Note: Column 0 is usually the hidden 'item_id' or 'employee_id'
     txtId.setText(model.getValueAt(selectedRow, 0).toString());
     txtName.setText(model.getValueAt(selectedRow, 1).toString());
@@ -378,7 +378,7 @@ public class EmployeeManagement extends javax.swing.JFrame {
     txtSal.setText(model.getValueAt(selectedRow, 3).toString());
     txtContact.setText(model.getValueAt(selectedRow, 4).toString());
     
-    // 4. Set the value for your ComboBox (e.g., Department or Gender)
+    // Set the value for your ComboBox (e.g., Department or Gender)
     
     }//GEN-LAST:event_tblEmployeesMouseClicked
 

@@ -47,7 +47,7 @@ public class AdminDashboard extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("SansSerif", 1, 24)); // NOI18N
         jLabel1.setText("Coffee Shop Dashboard");
 
         jButton3.setText("SALARY MANAGEMENT");
@@ -78,7 +78,7 @@ public class AdminDashboard extends javax.swing.JFrame {
                         .addGap(24, 24, 24))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jButton3)
-                        .addGap(121, 121, 121))))
+                        .addGap(115, 115, 115))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -89,9 +89,9 @@ public class AdminDashboard extends javax.swing.JFrame {
                 .addComponent(jButton2)
                 .addGap(48, 48, 48)
                 .addComponent(jButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 51, Short.MAX_VALUE)
                 .addComponent(jButton3)
-                .addGap(46, 46, 46))
+                .addGap(45, 45, 45))
         );
 
         pack();
