@@ -24,6 +24,7 @@ To run this project, create a database named `coffee_shop_db` and execute the fo
 
 -- System/admin Users (For Login)
 CREATE TABLE users (
+
     id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) UNIQUE NOT NULL,
     password VARCHAR(50) NOT NULL,
@@ -33,6 +34,7 @@ CREATE TABLE users (
 
 -- Employee Details
 CREATE TABLE employees (
+
     emp_id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100),
     position VARCHAR(50),
@@ -42,6 +44,7 @@ CREATE TABLE employees (
 
 -- Inventory Items
 CREATE TABLE inventory (
+
     item_id INT AUTO_INCREMENT PRIMARY KEY,
     item_name VARCHAR(100) NOT NULL,
     quantity INT DEFAULT 0,
@@ -51,6 +54,7 @@ CREATE TABLE inventory (
 );
 
 CREATE TABLE payroll (
+
     payment_id INT AUTO_INCREMENT PRIMARY KEY,
     employee_id INT,
     employee_name VARCHAR(100),
