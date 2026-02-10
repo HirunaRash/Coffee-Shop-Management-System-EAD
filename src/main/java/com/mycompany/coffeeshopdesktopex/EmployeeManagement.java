@@ -322,18 +322,18 @@ public class EmployeeManagement extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-        // TODO add your handling code here:
-        // Ask for confirmation before deleting
+        String id = txtId.getText().trim(); // Use .trim() to catch spaces
+
+    // 1. Check if the ID is empty FIRST
+    if (id.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Action Denied: Please enter or select an Employee ID to delete.", "Input Required", JOptionPane.ERROR_MESSAGE);
+        return; // Stop the code here
+    }
+
+    // 2. ONLY ask for confirmation if the ID is actually there
     int dialogResult = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this employee?", "Warning", JOptionPane.YES_NO_OPTION);
     
     if(dialogResult == JOptionPane.YES_OPTION) {
-        String id = txtId.getText();
-
-        if (id.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Please enter or select an Employee ID to delete.");
-            return;
-        }
-
         try (Connection con = DBConnection.connect()) {
             String sql = "DELETE FROM employees WHERE emp_id = ?";
             PreparedStatement pst = con.prepareStatement(sql);
@@ -343,11 +343,8 @@ public class EmployeeManagement extends javax.swing.JFrame {
 
             if (deleted > 0) {
                 JOptionPane.showMessageDialog(this, "Employee Deleted Successfully!");
-                
-                // 2. Refresh the table to show the data is gone
                 loadTable(); 
-                
-                // 3. Clear the text fields
+                // Clear fields
                 txtId.setText("");
                 txtName.setText("");
                 txtPos.setText("");
